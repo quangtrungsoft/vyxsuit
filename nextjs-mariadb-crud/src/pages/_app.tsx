@@ -1,3 +1,4 @@
+import React from "react";
 import Layout from "@/layouts/layout";
 import "bootstrap/dist/css/bootstrap.min.css";
 import type { AppProps } from "next/app";
