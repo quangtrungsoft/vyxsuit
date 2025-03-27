@@ -68,7 +68,7 @@ export default function ProductList() {
                   />
                   <p className="fs-4 mb-0">{item.Name}</p>
                   <p className="fs-6">{item.Description}</p>
-                  <Link href={`/product/${item.Main.Id}/builder`} passHref>
+                  <Link href={`/product/${item.Main.Id}/builder/step-2`} passHref>
                     <button className="p-3 w-100 border-0">
                       <span>View options</span>
                     </button>
