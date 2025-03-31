@@ -1,13 +1,15 @@
 
 import { useContext, useState, useEffect, ReactNode, JSX } from 'react';
 import { SuitBuilderContext, SuitBuilderContextType } from './suit-builder.context';
-import { Fabric, SuitStyle, SuitType, TrouserType } from '@/models/product.model';
+import { Buttontype, Fabric, LiningType, SuitStyle, SuitType, TrouserType } from '@/models/product.model';
 
 export const localStorageKey = {
   SuitType: 'suilt-builder:suit-type',
   TrouserType: 'suilt-builder:trouser',
   SuitStyle: 'suilt-builder:suit-style',
   Fabric: 'suilt-builder:fabric',
+  Lining: 'suilt-builder:lining',
+  Button: 'suilt-builder:button'
 }
 
 export interface SuitBuilderContextProviderProps {
@@ -19,6 +21,8 @@ export interface SuitBuilderContextProviderProps {
     const [trouserChoosen, setTrouser] = useState<TrouserType>('');
     const [suitStyleChoosen, setSuitStyle] = useState<SuitStyle>('');
     const [fabricChoosen, setFabric] = useState<Fabric>('');
+    const [liningChoosen, setLining] = useState<LiningType>('');
+    const [buttonChoosen, setButton] = useState<Buttontype>('');
   
     useEffect(() => {
       // Load saved value from localStorage on first render
@@ -33,6 +37,12 @@ export interface SuitBuilderContextProviderProps {
 
       const fabricOption = localStorage.getItem(localStorageKey.Fabric) as Fabric;
       if (fabricOption) setFabric(fabricOption);
+
+      const liningOption = localStorage.getItem(localStorageKey.Lining) as LiningType;
+      if (liningOption) setLining(liningOption);
+
+      const buttonOption = localStorage.getItem(localStorageKey.Button) as Buttontype;
+      if (buttonOption) setButton(buttonOption);
     }, []);
   
     const updateSuitType = (option: SuitType) => {
@@ -55,12 +65,24 @@ export interface SuitBuilderContextProviderProps {
       localStorage.setItem(localStorageKey.Fabric, option); // Save to localStorage
     };
 
+    const updateLining = (option: LiningType) => {
+      setLining(option);
+      localStorage.setItem(localStorageKey.Lining, option); // Save to localStorage
+    };
+
+    const updateButton = (option: Buttontype) => {
+      setButton(option);
+      localStorage.setItem(localStorageKey.Button, option); // Save to localStorage
+    };
+
     const handleClearLocalStorage = () => {
       localStorage.clear();
       setSuitType('');
       setTrouser('');
       setSuitStyle('');
       setFabric('');
+      setLining('');
+      setButton('');
     }
   
     const value: SuitBuilderContextType = { 
@@ -73,6 +95,10 @@ export interface SuitBuilderContextProviderProps {
       clear: handleClearLocalStorage,
       fabric: fabricChoosen,
       selectFabric: updateFabric,
+      lining: liningChoosen,
+      selectLining: updateLining,
+      button: buttonChoosen,
+      selectButton: updateButton,
     };
   
     return (

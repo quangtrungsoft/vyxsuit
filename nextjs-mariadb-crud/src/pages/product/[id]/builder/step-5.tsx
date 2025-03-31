@@ -3,11 +3,12 @@ import styles from "@/styles/product-list.module.scss";
 import clsx from "clsx";
 import Link from "next/link";
 import { useSuitBuilder } from "@/context/suit-builder/suit-builder.provider";
-import { Fabric, GroupedProduct } from "@/models/product.model";
+import { GroupedProduct } from "@/models/product.model";
 import React, { useEffect, useState } from "react";
 
 import EmblaCarousel from "@/components/EmblaCarousel";
 import Popup from "@/components/Popup";
+import { buildFabric } from "@/utils/productGroup";
 
 const Step5 = () => {
   const router = useRouter();
@@ -36,23 +37,23 @@ const Step5 = () => {
     }
   }, [fabric]);
 
-  const buildFabric = (
-    source: string
-  ): { group: string; fabric: { code: string; index: number } } => {
-    if (!source)
-      return {
-        group: "",
-        fabric: { code: "", index: 0 },
-      };
-    const arr = source.split(":;");
-    return {
-      group: arr[2],
-      fabric: {
-        code: arr[0],
-        index: Number(arr[1]),
-      },
-    };
-  };
+  // const buildFabric = (
+  //   source: string
+  // ): { group: string; fabric: { code: string; index: number } } => {
+  //   if (!source)
+  //     return {
+  //       group: "",
+  //       fabric: { code: "", index: 0 },
+  //     };
+  //   const arr = source.split(":;");
+  //   return {
+  //     group: arr[2],
+  //     fabric: {
+  //       code: arr[0],
+  //       index: Number(arr[1]),
+  //     },
+  //   };
+  // };
 
   const nextStep = () => {
     if(!fabric) return;

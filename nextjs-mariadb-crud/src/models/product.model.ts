@@ -20,3 +20,5 @@ export type SuitType = '' | '2Piece' | '3Piece';
 export type TrouserType = '' | 'SideLoopStyleWith2Plates' | 'DoubleButtonDoublePlated' | 'DoubleButtonPlateLessDisconnectedSideLoop' | 'PlateLessStandardSingleButton';
 export type SuitStyle = '' | 'ConfortFit' | 'SlimFit';
 export type Fabric = '' | string;
+export type LiningType = '' | string;
+export type Buttontype = '' | string;

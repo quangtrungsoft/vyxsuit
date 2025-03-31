@@ -4,19 +4,16 @@ import clsx from "clsx";
 import Link from "next/link";
 import { useSuitBuilder } from "@/context/suit-builder/suit-builder.provider";
 import { useEffect, useState } from "react";
-import { buildFabric, buildLining } from "@/utils/productGroup";
+import { buildLining } from "@/utils/productGroup";
 import { GroupedProduct } from "@/models/product.model";
 import EmblaCarousel from "@/components/EmblaCarousel";
 
 const Step0 = () => {
   const router = useRouter();
-  const { fabric, lining, selectLining } = useSuitBuilder();
+  const { button, selectButton } = useSuitBuilder();
   const [products, setProducts] = useState<GroupedProduct[]>([]);
   const [productIndexSelected, setProductIndexSelected] = useState<number>(0);
-  const [fabricBuiled, setFabricBuiled] = useState<{
-    group: string;
-    fabric: { code: string; index: number; image: string };
-  }>();
+
   const [liningBuiled, setLiningBuiled] = useState<{
     code: string;
     index: number;
@@ -25,32 +22,27 @@ const Step0 = () => {
   const { id } = router.query;
 
   useEffect(() => {
-    const fabricObj = buildFabric(fabric);
-    setFabricBuiled(fabricObj);
-  }, [fabric]);
-
-  useEffect(() => {
-    const liningObj = buildLining(lining);
+    const liningObj = buildLining(button);
     setLiningBuiled(liningObj);
     setTimeout(() => {
       console.log('set index scroll');
       setProductIndexSelected(liningObj.index);
     }, 500);
-  }, [lining]);
+  }, [button]);
 
   useEffect(() => {
-    fetch("/api/linings")
+    fetch("/api/buttons")
       .then((res) => res.json())
       .then((data) => setProducts(data));
   }, []);
 
   const nextStep = () => {
-    router.push(`/product/${id}/builder/step-7`);
+    router.push(`/product/${id}/builder/step-8`);
   };
   const handleChose = (img: GroupedProduct, index: number) => {
-    selectLining(`${img.Main.Code}:;${index}:;${img.Main.S3Url}`);
+    selectButton(`${img.Main.Code}:;${index}:;${img.Main.S3Url}`);
     setProductIndexSelected(index);
-    setLiningBuiled(buildLining(lining));
+    setLiningBuiled(buildLining(button));
   };
 
   return (
@@ -96,7 +88,7 @@ const Step0 = () => {
                 </g>
               </svg>
               <Link
-                href={`/product/${id}/builder/step-5`}
+                href={`/product/${id}/builder/step-6`}
                 className="primary-color text-decoration-none"
                 passHref
               >
@@ -105,12 +97,12 @@ const Step0 = () => {
             </div>
           </div>
           <div className="col-6">
-            <p className="text-center fs-4">Step 6/11</p>
+            <p className="text-center fs-4">Step 7/11</p>
             <div className="text-center fs-4">
-              <h3>Lining</h3>
+              <h3>Buttons</h3>
               <p className={styles["sub-text"]}>
-                Personalize the interior of your suit with a luxurious lining
-                that adds flair to every movement.
+                Add the finishing touch with buttons that elevate your suit’s
+                personality.
               </p>
             </div>
           </div>
@@ -175,35 +167,7 @@ const Step0 = () => {
             </EmblaCarousel>
           </div>
         </div>
-        <div className="row justify-content-center mt-5">
-          <div className="col-3">
-            <img
-              src={fabricBuiled?.fabric.image}
-              alt={`faric`}
-              style={{
-                width: "300px",
-                height: "300px",
-                cursor: "pointer",
-              }}
-            />
-          </div>
-          <div className="col-3">
-            {liningBuiled?.image ? (
-              <img
-                src={liningBuiled?.image}
-                alt={`faric`}
-                style={{
-                  width: "300px",
-                  height: "300px",
-                  cursor: "pointer",
-                }}
-              />
-            ) : null}
-          </div>
-          <div className="col-12 mt-5 text-center">
-            <h4>Selected Fabrics: {fabricBuiled?.fabric.code} </h4>
-          </div>
-        </div>
+
         <div className="row">
           <div className="col-4 m-auto mt-5 ">
             <button
