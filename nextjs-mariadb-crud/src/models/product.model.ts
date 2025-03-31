@@ -22,3 +22,30 @@ export type SuitStyle = '' | 'ConfortFit' | 'SlimFit';
 export type Fabric = '' | string;
 export type LiningType = '' | string;
 export type Buttontype = '' | string;
+export type ShirtMeasurementType = {
+    Chest: number;
+    Shoulder: number;
+    ArmLength: number;
+    ArmShoulderJoint: number;
+    ArmBicepWidth: number;
+    JacketLength: number;
+    Abdomen: number;
+    Belly: number;
+    Hips: number;
+    Neck: number;
+}
+export type TrouserMeasurementType = {
+    Waist: number;
+    UpperHips: number;
+    Hips: number;
+    Crotch: number;
+    Outswam: number;
+    Thigh: number;
+    Calf: number;
+}
+export type ImageMeasurementType = '' | string;
+export type MeasurementType = {
+    Shirt: ShirtMeasurementType;
+    Trouser: TrouserMeasurementType
+    Images: ImageMeasurementType[]
+}

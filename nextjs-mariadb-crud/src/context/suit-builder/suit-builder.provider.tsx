@@ -1,7 +1,7 @@
 
 import { useContext, useState, useEffect, ReactNode, JSX } from 'react';
 import { SuitBuilderContext, SuitBuilderContextType } from './suit-builder.context';
-import { Buttontype, Fabric, LiningType, SuitStyle, SuitType, TrouserType } from '@/models/product.model';
+import { Buttontype, Fabric, ImageMeasurementType, LiningType, ShirtMeasurementType, SuitStyle, SuitType, TrouserMeasurementType, TrouserType } from '@/models/product.model';
 
 export const localStorageKey = {
   SuitType: 'suilt-builder:suit-type',
@@ -23,6 +23,11 @@ export interface SuitBuilderContextProviderProps {
     const [fabricChoosen, setFabric] = useState<Fabric>('');
     const [liningChoosen, setLining] = useState<LiningType>('');
     const [buttonChoosen, setButton] = useState<Buttontype>('');
+    const [shirtMeasurementChoosen, setShirtMeasurement] = useState<ShirtMeasurementType>();
+    const [trouserMeasurementChoosen, setTrouserMeasurement] = useState<TrouserMeasurementType>();
+    const [imageMeasurementChoosen, setImageMeasurement] = useState<ImageMeasurementType>('');
+    const [imageMeasurementDeleted, delImageMeasurement] = useState<number>(-1);
+
   
     useEffect(() => {
       // Load saved value from localStorage on first render

@@ -4,16 +4,34 @@ import clsx from "clsx";
 import Link from "next/link";
 import { useSuitBuilder } from "@/context/suit-builder/suit-builder.provider";
 import { SuitStyle } from "@/models/product.model";
+import Compressor from 'compressorjs';
 
 const Step0 = () => {
   const router = useRouter();
-  const { suitStyle, selectSuitStyle } = useSuitBuilder();
+  const { measurement, selectSuitStyle } = useSuitBuilder();
   const { id } = router.query;
 
   const nextStep = () => {
     router.push(`/product/${id}/builder/step-9`);
   };
   const handleChose = (type: SuitStyle) => selectSuitStyle(type);
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (files && files[0]) {
+      new Compressor(files[0], {
+        quality: 0.6,  // Chất lượng nén ảnh
+        maxWidth: 800, // Kích thước tối đa chiều rộng
+        success(result) {
+          const base64Image = URL.createObjectURL(result);  // Chuyển đổi hình ảnh nén thành base64
+          console.log(base64Image);
+        },
+        error(err) {
+          console.error(err);
+        },
+      });
+    }
+  };
 
   return (
     <>
@@ -229,7 +247,7 @@ const Step0 = () => {
 
               {/* row */}
               <div className={clsx(styles["field"], "col-6")}>
-                <label>hips:</label>
+                <label>Hips:</label>
               </div>
               <div className="col-6">
                 <input type="number" placeholder="Input hips" />
@@ -237,7 +255,7 @@ const Step0 = () => {
 
               {/* row */}
               <div className={clsx(styles["field"], "col-6")}>
-                <label>crotch:</label>
+                <label>Crotch:</label>
               </div>
               <div className="col-6">
                 <input type="number" placeholder="Input crotch" />
@@ -275,7 +293,7 @@ const Step0 = () => {
             <div className="w-100 h-100 d-flex flex-row justify-content-center align-items-center gap-3">
             <h5>Images (front, back, left side, rigth side)</h5>
             <label className={clsx(styles["icon"], styles["btn-icon"])} htmlFor="btn-upload-img">
-               <input type="file" className="hidden" id="btn-upload-img" multiple accept="image/jpeg, image/png"  />
+               <input type="file" className="hidden" id="btn-upload-img" multiple accept="image/jpeg, image/png" onChange={handleFileChange} />
                Upload
             </label>
             </div>
