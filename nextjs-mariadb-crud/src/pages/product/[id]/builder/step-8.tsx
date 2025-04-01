@@ -3,35 +3,64 @@ import styles from "@/styles/product-list.module.scss";
 import clsx from "clsx";
 import Link from "next/link";
 import { useSuitBuilder } from "@/context/suit-builder/suit-builder.provider";
-import { SuitStyle } from "@/models/product.model";
 import Compressor from 'compressorjs';
 
 const Step0 = () => {
   const router = useRouter();
-  const { measurement, selectSuitStyle } = useSuitBuilder();
+  const { measurement, selectUnitOfMeasurement, updateShirtMeasurement, updateTrouserMeasurement, pushImageMeasurement, deleteImageMeasurement } = useSuitBuilder();
   const { id } = router.query;
 
   const nextStep = () => {
     router.push(`/product/${id}/builder/step-9`);
   };
-  const handleChose = (type: SuitStyle) => selectSuitStyle(type);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if(measurement.Images.length > 4) {
+      // alert error 
+      return;
+    }
     const files = e.target.files;
-    if (files && files[0]) {
-      new Compressor(files[0], {
-        quality: 0.6,  // Chất lượng nén ảnh
-        maxWidth: 800, // Kích thước tối đa chiều rộng
-        success(result) {
-          const base64Image = URL.createObjectURL(result);  // Chuyển đổi hình ảnh nén thành base64
-          console.log(base64Image);
-        },
-        error(err) {
-          console.error(err);
-        },
-      });
+    if (files && files.length) {
+      Array.from(files).forEach(file =>{
+        if (file.type.match('image.*')) {
+          new Compressor(file, {
+            quality: 0.6,  // Chất lượng nén ảnh
+            maxWidth: 800, // Kích thước tối đa chiều rộng
+            success(result) {
+              const base64Image = URL.createObjectURL(result);  // Chuyển đổi hình ảnh nén thành base64
+              console.log(base64Image);
+              pushImageMeasurement(base64Image);
+            },
+            error(err) {
+              console.error(err);
+            },
+          });
+        } else {
+          // alert error
+        }
+      })
     }
   };
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    // setSelectedOption(event.target.value);
+  };
+
+  const handleChangeValue = (group: string, prop: string, value: number) => {
+    if (group === "shirt") {
+      const data = {
+        ...measurement.Shirt,
+        [prop]: value
+      }
+      updateShirtMeasurement(data);
+    } else if (group === "trouser") {
+      const data = {
+        ...measurement.Trouser,
+        [prop]: value
+      }
+      updateTrouserMeasurement(data);
+    }
+  }
 
   return (
     <>
@@ -102,7 +131,7 @@ const Step0 = () => {
             <div className="w-100 h-100 d-flex flex-row justify-content-center gap-3">
               <h4 className="mb-0">Unit for measurement: </h4>
               <div className={clsx(styles["radio-container"])}>
-                <input type="radio" id="option1" name="option" />
+                <input type="radio" id="option1" name="option"/>
                 <label
                   htmlFor="option1"
                   className={clsx(styles["radio-label"])}

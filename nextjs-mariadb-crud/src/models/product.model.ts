@@ -44,8 +44,10 @@ export type TrouserMeasurementType = {
     Calf: number;
 }
 export type ImageMeasurementType = '' | string;
+export type UnitMeasurementType = 'cm' | 'inch';
 export type MeasurementType = {
     Shirt: ShirtMeasurementType;
     Trouser: TrouserMeasurementType
-    Images: ImageMeasurementType[]
+    Images: ImageMeasurementType[],
+    Unit: UnitMeasurementType
 }

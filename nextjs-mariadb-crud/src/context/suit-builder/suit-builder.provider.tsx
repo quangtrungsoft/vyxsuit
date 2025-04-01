@@ -1,7 +1,7 @@
 
 import { useContext, useState, useEffect, ReactNode, JSX } from 'react';
 import { SuitBuilderContext, SuitBuilderContextType } from './suit-builder.context';
-import { Buttontype, Fabric, ImageMeasurementType, LiningType, ShirtMeasurementType, SuitStyle, SuitType, TrouserMeasurementType, TrouserType } from '@/models/product.model';
+import { Buttontype, Fabric, ImageMeasurementType, LiningType, MeasurementType, ShirtMeasurementType, SuitStyle, SuitType, TrouserMeasurementType, TrouserType, UnitMeasurementType } from '@/models/product.model';
 
 export const localStorageKey = {
   SuitType: 'suilt-builder:suit-type',
@@ -9,7 +9,8 @@ export const localStorageKey = {
   SuitStyle: 'suilt-builder:suit-style',
   Fabric: 'suilt-builder:fabric',
   Lining: 'suilt-builder:lining',
-  Button: 'suilt-builder:button'
+  Button: 'suilt-builder:button',
+  Measurement: 'suilt-builder:measurement',
 }
 
 export interface SuitBuilderContextProviderProps {
@@ -23,11 +24,11 @@ export interface SuitBuilderContextProviderProps {
     const [fabricChoosen, setFabric] = useState<Fabric>('');
     const [liningChoosen, setLining] = useState<LiningType>('');
     const [buttonChoosen, setButton] = useState<Buttontype>('');
-    const [shirtMeasurementChoosen, setShirtMeasurement] = useState<ShirtMeasurementType>();
-    const [trouserMeasurementChoosen, setTrouserMeasurement] = useState<TrouserMeasurementType>();
-    const [imageMeasurementChoosen, setImageMeasurement] = useState<ImageMeasurementType>('');
-    const [imageMeasurementDeleted, delImageMeasurement] = useState<number>(-1);
-
+    const [unitOfMeasurementChoosen, setUnitOfMMeasurement] = useState<UnitMeasurementType>('cm');
+    const [measurementChoosen, setMeasurement] = useState<MeasurementType>({} as MeasurementType);
+    const [shirtMeasurementChoosen, setShirtMeasurement] = useState<ShirtMeasurementType>({} as ShirtMeasurementType);
+    const [trouserMeasurementChoosen, setTrouserMeasurement] = useState<TrouserMeasurementType>({} as TrouserMeasurementType);
+    const [imageMeasurementChoosen, setImageMeasurement] = useState<ImageMeasurementType[]>([]);
   
     useEffect(() => {
       // Load saved value from localStorage on first render
@@ -48,6 +49,12 @@ export interface SuitBuilderContextProviderProps {
 
       const buttonOption = localStorage.getItem(localStorageKey.Button) as Buttontype;
       if (buttonOption) setButton(buttonOption);
+
+      const measurementOption = localStorage.getItem(localStorageKey.Measurement);
+      if (measurementOption){
+        const measurement = JSON.parse(measurementOption) as MeasurementType;
+        setMeasurement(measurement);
+      }
     }, []);
   
     const updateSuitType = (option: SuitType) => {
@@ -80,6 +87,60 @@ export interface SuitBuilderContextProviderProps {
       localStorage.setItem(localStorageKey.Button, option); // Save to localStorage
     };
 
+    const updateUnitOfMeasurement = (option: UnitMeasurementType) => {
+      setUnitOfMMeasurement(option);
+      const measurement: MeasurementType= {
+        Shirt: shirtMeasurementChoosen,
+        Trouser: trouserMeasurementChoosen,
+        Images: imageMeasurementChoosen.length > 0? [...imageMeasurementChoosen] : [],
+        Unit: option
+      }
+      localStorage.setItem(localStorageKey.Measurement, JSON.stringify(measurement)); // Save to localStorage
+    }
+
+    const handleUpdateShirtMeasurement = (shirtMeasurement: ShirtMeasurementType) => {
+      setShirtMeasurement(shirtMeasurement);
+      const measurement: MeasurementType= {
+        Shirt: shirtMeasurement,
+        Trouser: trouserMeasurementChoosen,
+        Images: imageMeasurementChoosen.length > 0? [...imageMeasurementChoosen] : [],
+        Unit: unitOfMeasurementChoosen
+      }
+      localStorage.setItem(localStorageKey.Measurement, JSON.stringify(measurement)); // Save to localStorage
+    }
+
+    const handleUpdateTrouserMeasurement = (trouserMeasurement: TrouserMeasurementType) => {
+      setTrouserMeasurement(trouserMeasurement);
+      const measurement: MeasurementType= {
+        Shirt: shirtMeasurementChoosen,
+        Trouser: trouserMeasurement,
+        Images: imageMeasurementChoosen.length > 0? [...imageMeasurementChoosen] : [],
+        Unit: unitOfMeasurementChoosen
+      }
+      localStorage.setItem(localStorageKey.Measurement, JSON.stringify(measurement)); // Save to localStorage
+    }
+
+    const handlePushImageMeasuremented = (imageMeasurement: ImageMeasurementType) => {
+      const images = [...imageMeasurementChoosen, imageMeasurement];
+      saveImageMeasurementToLocalStorage(images);
+    }
+
+    const handleDeleteImageMeasuremented = (index: number) => {
+      const images = imageMeasurementChoosen.splice(index, 1);
+      saveImageMeasurementToLocalStorage(images);
+    }
+
+    const saveImageMeasurementToLocalStorage = (images: ImageMeasurementType[]) => {
+      setImageMeasurement(images);
+      const measurement: MeasurementType= {
+        Shirt: shirtMeasurementChoosen,
+        Trouser: trouserMeasurementChoosen,
+        Images: images,
+        Unit: unitOfMeasurementChoosen
+      }
+      localStorage.setItem(localStorageKey.Measurement, JSON.stringify(measurement)); // Save to localStorage
+    }
+
     const handleClearLocalStorage = () => {
       localStorage.clear();
       setSuitType('');
@@ -88,6 +149,10 @@ export interface SuitBuilderContextProviderProps {
       setFabric('');
       setLining('');
       setButton('');
+      setMeasurement({} as MeasurementType);
+      setShirtMeasurement({} as ShirtMeasurementType);
+      setTrouserMeasurement({} as TrouserMeasurementType);
+      setImageMeasurement([]);
     }
   
     const value: SuitBuilderContextType = { 
@@ -104,6 +169,12 @@ export interface SuitBuilderContextProviderProps {
       selectLining: updateLining,
       button: buttonChoosen,
       selectButton: updateButton,
+      measurement: measurementChoosen,
+      selectUnitOfMeasurement: updateUnitOfMeasurement,
+      updateShirtMeasurement: handleUpdateShirtMeasurement,
+      updateTrouserMeasurement: handleUpdateTrouserMeasurement,
+      pushImageMeasurement: handlePushImageMeasuremented,
+      deleteImageMeasurement: handleDeleteImageMeasuremented,
     };
   
     return (
