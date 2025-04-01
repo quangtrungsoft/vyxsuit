@@ -9,11 +9,12 @@ export type Product = {
 };
 
 export type GroupedProduct = {
+    Id: number,
     Name: string;
     Description: string;
     Price: number;
     Main: Product;
-    Images: { S3Url: string; Code: string }[];
+    Images: { Id: number, S3Url: string; Code: string }[];
 };
 
 export type SuitType = '' | '2Piece' | '3Piece';

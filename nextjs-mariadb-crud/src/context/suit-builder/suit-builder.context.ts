@@ -19,7 +19,7 @@ export interface SuitBuilderContextType {
   selectUnitOfMeasurement: (option: UnitMeasurementType) => void;
   updateShirtMeasurement: (option: ShirtMeasurementType) => void;
   updateTrouserMeasurement: (option: TrouserMeasurementType) => void;
-  pushImageMeasurement: (option: ImageMeasurementType) => void;
+  pushImageMeasurement: (option: ImageMeasurementType | ImageMeasurementType[]) => void;
   deleteImageMeasurement: (index: number) => void;
   clear: () => void;
 }
