@@ -84,18 +84,18 @@ const Step4 = () => {
             <img src="/images/Comfort-Fit.jpg" className={clsx("w-100")} />
             {/* <span className={clsx(styles["img-alt"], "fs-3")}>Comfort Fit</span> */}
             
-            <div className={clsx(styles["radio-container"], "mt-4")}>
+            <div className={clsx("radio-container mt-4")}>
               <input type="radio" id="option1" name="option" checked={suitStyle === 'ConfortFit'} />
-              <label htmlFor="option1" className={clsx(styles['radio-label'])}>Comfort Fit</label>
+              <label htmlFor="option1" className={clsx("radio-label")}>Comfort Fit</label>
             </div>
           </div>
           <div className={clsx(styles["suit-type"], "col-5")} onClick={() => handleChose('SlimFit')}>
             <img src="/images/Slim-Fit.JPG" className={clsx("w-100")} />
             {/* <span className={clsx(styles["img-alt"], "fs-3")}>Slim Fit</span> */}
 
-            <div className={clsx(styles["radio-container"], "mt-4")}>
+            <div className={clsx("radio-container mt-4")}>
               <input type="radio" id="option2" name="option" checked={suitStyle === 'SlimFit'} />
-              <label htmlFor="option2" className={clsx(styles['radio-label'])}>Slim Fit</label>
+              <label htmlFor="option2" className={clsx("radio-label")}>Slim Fit</label>
             </div>
           </div>
         </div>
