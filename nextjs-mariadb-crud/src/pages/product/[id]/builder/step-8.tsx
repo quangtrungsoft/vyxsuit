@@ -3,17 +3,12 @@ import styles from "@/styles/product-list.module.scss";
 import clsx from "clsx";
 import Link from "next/link";
 import { useSuitBuilder } from "@/context/suit-builder/suit-builder.provider";
-import Compressor from "compressorjs";
 import {
-  ImageMeasurementType,
   UnitMeasurementType,
 } from "@/models/product.model";
 import {
-  calculateMeasurementByUnit,
   compressAndConvertToBase64,
-  debounce,
 } from "@/utils/productGroup";
-import { useCallback, useEffect, useState } from "react";
 
 const Step8 = () => {
   const router = useRouter();
@@ -26,10 +21,8 @@ const Step8 = () => {
     deleteImageMeasurement,
   } = useSuitBuilder();
   const { id } = router.query;
-  const [unit, setUnit] = useState<UnitMeasurementType>(measurement.Unit);
-  const [images, setImages] = useState<ImageMeasurementType[]>(
-    measurement.Images
-  );
+  // const [unit, setUnit] = useState<UnitMeasurementType>(measurement.Unit);
+  // const [images, setImages] = useState<ImageMeasurementType[]>(measurement.Images);
 
   /* this effect use to re-calc by unit selected */
   // useEffect(() => {
@@ -48,7 +41,6 @@ const Step8 = () => {
   };
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const images: string[] = [];
     const files = e.target.files;
     if (files && files.length) {
       const imageFiles = Array.from(files);
@@ -66,7 +58,7 @@ const Step8 = () => {
   };
 
   const handleChangeUnit = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setUnit(event.target.value as UnitMeasurementType);
+    // setUnit(event.target.value as UnitMeasurementType);
     selectUnitOfMeasurement(event.target.value as UnitMeasurementType);
   };
 

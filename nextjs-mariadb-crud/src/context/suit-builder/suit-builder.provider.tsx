@@ -68,11 +68,8 @@ export const SuitBuilderContextProvider: React.FC<
   const [fabricChoosen, setFabric] = useState<Fabric>("");
   const [liningChoosen, setLining] = useState<LiningType>("");
   const [buttonChoosen, setButton] = useState<Buttontype>("");
-  const [unitOfMeasurementChoosen, setUnitOfMMeasurement] =
-    useState<UnitMeasurementType>("cm");
-  const [measurementChoosen, setMeasurement] = useState<MeasurementType>(
-    SuitBuilderDefault as unknown as MeasurementType
-  );
+  const [unitOfMeasurementChoosen, setUnitOfMMeasurement] = useState<UnitMeasurementType>("cm");
+  const [measurementChoosen, setMeasurement] = useState<MeasurementType>(SuitBuilderDefault as unknown as MeasurementType);
   const [shirtMeasurementChoosen, setShirtMeasurement] =
     useState<ShirtMeasurementType>({
       Chest: 0,
@@ -96,9 +93,7 @@ export const SuitBuilderContextProvider: React.FC<
       Thigh: 0,
       Calf: 0,
     });
-  const [imageMeasurementChoosen, setImageMeasurement] = useState<
-    ImageMeasurementType[]
-  >([]);
+  const [imageMeasurementChoosen, setImageMeasurement] = useState<ImageMeasurementType[]>([]);
 
   useEffect(() => {
     // Load saved value from localStorage on first render

@@ -2,18 +2,24 @@ import { useRouter } from "next/router";
 import styles from "@/styles/product-list.module.scss";
 import clsx from "clsx";
 import Link from "next/link";
-import { useSuitBuilder } from "@/context/suit-builder/suit-builder.provider";
-import { SuitStyle } from "@/models/product.model";
+import Select, { Option} from "@/components/Select";
+import { countries } from "@/shared/country";
 
-const Step4 = () => {
+const Step9 = () => {
   const router = useRouter();
-  const { suitStyle, selectSuitStyle } = useSuitBuilder();
   const { id } = router.query;
+  const countrySource = countries.map(country => ({
+    label: country.name,
+    value: country.code2,
+  })) as Option[];
 
   const nextStep = () => {
-    router.push(`/product/${id}/builder/step-5`);
+    router.push(`/product/${id}/builder/step-8`);
   };
-  const handleChose = (type: SuitStyle) => selectSuitStyle(type)
+
+  const handleSelectCountry = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    console.log(event.target.value);
+  }
 
   return (
     <>
@@ -58,7 +64,7 @@ const Step4 = () => {
                 </g>
               </svg>
               <Link
-                href={`/product/${id}/builder/step-3`}
+                href={`/product/${id}/builder/step-10`}
                 className="primary-color text-decoration-none"
                 passHref
               >
@@ -67,39 +73,45 @@ const Step4 = () => {
             </div>
           </div>
           <div className="col-6">
-            <p className="text-center fs-4">Step 4/11</p>
+            <p className="text-center fs-4">Step 9/11</p>
             <div className="text-center fs-4">
-              <h3>Your Perfect Fit Awaits</h3>
-              <p className={styles["sub-text"]}>
+              <h3>Payment & Shipping</h3>
+              {/* <p className={styles["sub-text"]}>
                 Choose the fit that complements your body and style preferences.
-              </p>
+              </p> */}
             </div>
           </div>
         </div>
       </div>
 
       <div className="container">
-        <div className="row">
-          <div className={clsx(styles["suit-type"], "col-5 offset-1")} onClick={() => handleChose('ConfortFit')}>
-            <img src="/images/Comfort-Fit.jpg" className={clsx("w-100")} />
-            {/* <span className={clsx(styles["img-alt"], "fs-3")}>Comfort Fit</span> */}
-            
-            <div className={clsx(styles["radio-container"], "mt-4")}>
-              <input type="radio" id="option1" name="option" checked={suitStyle === 'ConfortFit'} />
-              <label htmlFor="option1" className={clsx(styles['radio-label'])}>Comfort Fit</label>
-            </div>
+        <div className="row mt-3">
+          <div className="col-12">
+            <h3>Customer information</h3>
           </div>
-          <div className={clsx(styles["suit-type"], "col-5")} onClick={() => handleChose('SlimFit')}>
-            <img src="/images/Slim-Fit.JPG" className={clsx("w-100")} />
-            {/* <span className={clsx(styles["img-alt"], "fs-3")}>Slim Fit</span> */}
-
-            <div className={clsx(styles["radio-container"], "mt-4")}>
-              <input type="radio" id="option2" name="option" checked={suitStyle === 'SlimFit'} />
-              <label htmlFor="option2" className={clsx(styles['radio-label'])}>Slim Fit</label>
-            </div>
+          <div className="col-12">
+            <input placeholder="Email Address" />
           </div>
         </div>
-        <div className="row">
+        <div className="row mt-3">
+          <div className="col-6">
+            <input placeholder="First name *" />
+          </div>
+          <div className="col-6">
+            <input placeholder="Last name *" />
+          </div>
+        </div>
+        <div className="row mt-3">
+          <div className="col-12">
+            <input placeholder="Company name" />
+          </div>
+        </div>
+        <div className="row mt-3">
+          <div className="col-12">
+            <Select options={countrySource} placeholder={"Country / Region *"} onChange={handleSelectCountry} />
+          </div>
+        </div>
+        <div className="row mt-3">
           <div className="col-4 m-auto mt-5 ">
             <button
               className="p-3 w-100 bg-primary-color border-0 accent-color fs-5"
@@ -114,4 +126,4 @@ const Step4 = () => {
   );
 };
 
-export default Step4;
+export default Step9;
