@@ -1,3 +1,25 @@
+-- 1. create new user 
+-- Create database if not exists
+CREATE DATABASE IF NOT EXISTS vyxsuit_db;
+
+-- Drop user if exists
+DROP USER IF EXISTS 'vyxsuit_user'@'localhost';
+DROP USER IF EXISTS 'vyxsuit_user'@'%';
+
+-- Create new user with all permissions
+CREATE USER 'vyxsuit_user'@'localhost' IDENTIFIED BY 'vyxsuit_password';
+CREATE USER 'vyxsuit_user'@'%' IDENTIFIED BY 'vyxsuit_password';
+
+-- Grant privileges to the user for specific database
+GRANT ALL PRIVILEGES ON vyxsuit_db.* TO 'vyxsuit_user'@'localhost';
+GRANT ALL PRIVILEGES ON vyxsuit_db.* TO 'vyxsuit_user'@'%';
+
+-- Apply the privileges
+FLUSH PRIVILEGES;
+
+-- Use the database
+USE vyxsuit_db;
+
 -- Drop tables if they exist
 DROP TABLE IF EXISTS OrderDetail;
 DROP TABLE IF EXISTS Orders;
@@ -14,7 +36,7 @@ CREATE TABLE Customer (
     Id INT AUTO_INCREMENT PRIMARY KEY,
     FirstName VARCHAR(255) NOT NULL,
     LastName VARCHAR(255) NOT NULL,
-    Email VARCHAR(255) NOT NULL UNIQUE,
+    Email VARCHAR(255) NOT NULL,
     CompanyName VARCHAR(255)
 );
 
@@ -64,7 +86,8 @@ CREATE TABLE Product (
         'FullSuitMerinoWool',
         
         'Lining',
-        'Button'
+        'Button',
+        'TrouserOnly'
     ) NOT NULL,
 
 
@@ -83,7 +106,6 @@ CREATE TABLE ProductTranslation (
 
 CREATE TABLE Measurement (
     Id INT AUTO_INCREMENT PRIMARY KEY,
-    MeasurementType ENUM('Shirt', 'Trouser') NOT NULL,
     Unit ENUM('Cm', 'Inch') NOT NULL
 );
 
@@ -100,6 +122,7 @@ CREATE TABLE ShirtMeasurement (
     BellyTummy DECIMAL(5,2),
     Hips DECIMAL(5,2),
     Neck DECIMAL(5,2),
+    MeasurementType ENUM('Shirt', 'Trouser') NOT NULL,
     FOREIGN KEY (MeasurementId) REFERENCES Measurement(Id) ON DELETE CASCADE
 );
 
@@ -112,6 +135,7 @@ CREATE TABLE TrouserMeasurement (
     Outswarm DECIMAL(5,2),
     Thigh DECIMAL(5,2),
     Calf DECIMAL(5,2),
+    MeasurementType ENUM('Shirt', 'Trouser') NOT NULL,
     FOREIGN KEY (MeasurementId) REFERENCES Measurement(Id) ON DELETE CASCADE
 );
 
@@ -159,16 +183,13 @@ CREATE TABLE Orders (
 CREATE TABLE OrderDetail (
     Id INT AUTO_INCREMENT PRIMARY KEY,
     OrderId INT NOT NULL,
-    ProductId INT NOT NULL,
+    ProductId INT NOT NULL COMMENT 'suitId, suiTypeId, trouserId, jacketId, fabridId, liningId, buttonId', 
     Price DECIMAL(10,2) NOT NULL DEFAULT 0.00,
     Quantity TINYINT NOT NULL DEFAULT 1,
     SuitType ENUM('TwoPieceSuit', 'ThreePieceSuit'),
-    TrouserId INT,
     TailoredFit ENUM('SlimFit', 'ComfortFit'),
-    FabricId INT,
-    LiningId INT,
-    ButtonId INT,
 
     FOREIGN KEY (OrderId) REFERENCES Orders(OrderId) ON DELETE CASCADE,
     FOREIGN KEY (ProductId) REFERENCES Product(Id) ON DELETE CASCADE
 );
+
